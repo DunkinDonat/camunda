@@ -17,15 +17,14 @@ import org.camunda.bpm.engine.impl.context.Context;
 
 import com.sun.mail.smtp.SMTPTransport;
 
-public class FahrerInformieren implements JavaDelegate {
+public class Fahrer_absagen implements JavaDelegate {
 
 	private final static Logger LOGGER = Logger.getLogger("LOAN-REQUESTS");
 
 	public void execute(DelegateExecution execution) throws Exception {
-		// TODO Auto-generated method stub
-		LOGGER.info("Fahrer wird benachrichtigt...");
+		LOGGER.info("Fahrer-Absage wird vorbereitet...");
 
-		// Fahrer und dessen Mail-Adresse abfragen
+		// Fahrer mit dessen Mail-Adresse auslesen
 		String Fahrer = (String) execution.getVariable("ClaimedFahrer");
 		IdentityService identityService = Context.getProcessEngineConfiguration().getIdentityService();
 		User user = identityService.createUserQuery().userId(Fahrer).singleResult();
@@ -37,10 +36,9 @@ public class FahrerInformieren implements JavaDelegate {
 		Session session = Session.getInstance(props, null);
 		Message msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress("limousinenvermietung@gmail.com"));
-		;
-		msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("joel.ranzer@gmail.com", false));
-		msg.setSubject("Zusage");
-		msg.setText("Der Kunde hat zugesagt.");
+		msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail(), false));
+		msg.setSubject("Absage");
+		msg.setText("Der Kunde hat leider nicht bezahlt!");
 		msg.setHeader("X-Mailer", "Tov Are's program");
 		msg.setSentDate(new Date());
 		SMTPTransport t = (SMTPTransport) session.getTransport("smtps");
@@ -48,7 +46,7 @@ public class FahrerInformieren implements JavaDelegate {
 		t.sendMessage(msg, msg.getAllRecipients());
 		System.out.println("Response: " + t.getLastServerResponse());
 		t.close();
-		LOGGER.info("E-Mail erfolgreich gesendet");
+		LOGGER.info("Absage-E-Mail erfolgreich versendet");
 
 	}
 

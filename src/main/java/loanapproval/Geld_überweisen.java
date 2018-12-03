@@ -12,15 +12,12 @@ private final static Logger LOGGER = Logger.getLogger("LOAN-REQUESTS");
 
 public void execute(DelegateExecution execution) throws Exception {
 
-		// TODO Auto-generated method stub
-		LOGGER.info("Der Betrag von'"
+		LOGGER.info("Der Geldbetrag von'"
 		+ execution.getVariable("Amount") +
-		"' Euro wurde überwiesen an: '" +
-		execution.getVariable("ClaimedFahrer") +
-		"'");
+		"' Euro wurde von '" + execution.getVariable("Customer") + "' ueberwiesen an den Fahrer '" +
+		execution.getVariable("ClaimedFahrer") + "'");
 	}
 	
-
 }
 
 

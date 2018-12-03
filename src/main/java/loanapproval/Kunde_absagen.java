@@ -12,14 +12,12 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import com.sun.mail.smtp.SMTPTransport;
 
 
-public class KundeAbsagen implements JavaDelegate{
+public class Kunde_absagen implements JavaDelegate{
 	private final static Logger LOGGER = Logger.getLogger("LOAN-REQUESTS");
 	
 	
-	public void execute(DelegateExecution arg0) throws Exception {
-		// TODO Auto-generated method stub
-		LOGGER.info("Fahrer wird benachrichtigt...");
-		
+	public void execute(DelegateExecution execution) throws Exception {
+		LOGGER.info("Kunden-Absage fuer:'" + execution.getVariable("Customer") + "' wird vorbereitet...");
 		//E-Mail senden
 		Properties props = System.getProperties();
         props.put("mail.smtps.host","smtp.gmail.com");
@@ -39,6 +37,7 @@ public class KundeAbsagen implements JavaDelegate{
         t.sendMessage(msg, msg.getAllRecipients());
         System.out.println("Response: " + t.getLastServerResponse());
         t.close();
+		LOGGER.info("Kunden-Absage wurde versendet!");
 	}
 	
 	
